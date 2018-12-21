@@ -1,0 +1,23 @@
+---
+
+- name: Check params - dns_conf_name/dns_ops
+  fail:
+    msg: "Insufficient params: Check dns_conf_name/dns_ops"
+  when:
+  - dns_ops != 'install' and dns_conf_name is undefined
+
+- name: Check params - new_hostname/new_new_nameserver_search
+  fail:
+    msg: "Insufficient params: new_hostname or new_new_ns_search_for or both are specified"
+  when: (dns_ops != 'install' and new_hostname is undefined and new_ns_search_for is undefined) or (dns_ops != 'install' and new_hostname is defined and new_ns_search_for is defined)
+
+- name: Check params - new_ip
+  fail:
+    msg: "new_ip is not defined"
+  when: dns_ops != 'install' and new_ip is not defined
+
+- name: Check params - dns_ops value(install/add/remove)
+  fail:
+    msg: "only install/add/remove is possible for dns_opss"
+  when:
+  - not dns_ops in [ 'install', 'add', 'remove']

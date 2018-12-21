@@ -1,0 +1,65 @@
+---
+
+- name: Check if conf exist
+  stat:
+    path: "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
+  register: conf_exist
+  become: yes
+
+- name: Clean exist DNS conf for OKD
+  file:
+    path: "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
+    state: absent
+  become: yes
+  when:
+  - conf_exist.stat.exists
+  - rewrite_conf is defined
+  - rewrite_conf|bool
+
+- name: Clean exist DNS conf for OKD
+  file:
+    path: "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
+    state: touch
+  become: yes
+
+- name: Add address record to dnsmasq
+  lineinfile:
+    path: "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
+    line: >
+       address=/{{ new_hostname }}/{{ new_ip }}/
+  become: yes
+  when:
+  - dns_ops == 'add'
+  - new_hostname is defined
+
+- name: Delete address record to dnsmasq
+  lineinfile:
+    path: "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
+    line: >
+       address=/{{ new_hostname }}/{{ new_ip }}/
+    state: absent
+  become: yes
+  when:
+  - dns_ops == 'remove'
+  - new_hostname is defined
+
+- name: Add nameserver record to dnsmasq
+  lineinfile:
+    path: "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
+    line: >
+       server=/{{ new_ns_search_for }}/{{ new_ip }}/
+  become: yes
+  when:
+  - dns_ops == 'add'
+  - new_ns_search_for is defined
+
+- name: Delete nameserver record to dnsmasq
+  lineinfile:
+    path: "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
+    line: >
+       server=/{{ new_ns_search_for }}/{{ new_ip }}/
+    state: absent
+  become: yes
+  when:
+  - dns_ops == 'remove'
+  - new_ns_search_for is defined

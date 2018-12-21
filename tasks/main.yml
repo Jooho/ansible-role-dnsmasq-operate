@@ -1,0 +1,35 @@
+---
+
+- name: Check Logic
+  import_tasks: ./check.yml
+
+- name: install dnsmasq package
+  yum:
+    name: dnsmasq
+    state: present
+  become: yes
+  when: dns_ops == 'install'
+
+- name: Check if forwarder.conf exist
+  stat:
+    path: "{{ dns_conf_path }}/forwarder.conf"
+  register: forwarder_exist
+
+- name: Copy forwarder.conf
+  template: "src=forwarder.conf.j2 dest={{ dns_conf_path }}/forwarder.conf"
+  become: yes
+  when:
+  - forwarder_dns is defined
+  - not forwarder_exist.stat.exists
+  - forwarder_exist.stat.exists and rewrite_forward_conf|bool
+
+- name: Copy forwarder.conf if forwarder_dns is not defined
+  copy: "src=forwarder.conf dest={{ dns_conf_path }}/forwarder.conf"
+  become: yes
+  when:
+  - forwarder_dns is not defined
+  - (not forwarder_exist.stat.exists) or (forwarder_exist.stat.exists and rewrite_forward_conf|bool)
+
+- name: DNS operate(address/nameserver)
+  import_tasks: ./operate.yml
+  when: dns_ops != 'install'
