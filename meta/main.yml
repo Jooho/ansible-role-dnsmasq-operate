@@ -1,6 +1,6 @@
 galaxy_info:
   role_name: dnsmasq_operate
-  author: your Jooho Lee
+  author: Jooho Lee
   description: This role help operate DNSMasq address/nameserver record and install dnsmasq
   company: Jhouse
 
