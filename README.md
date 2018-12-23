@@ -33,6 +33,17 @@ Dependencies
 None
 
 
+Example Playbook - Install
+----------------
+~~~
+- name: Example Playbook
+  hosts: localhost
+  tasks:
+    - import_role:
+        name: ansible-role-dnsmasq-operate
+      vars:
+        dns_ops: add
+~~~
 
 Example Playbook - add/remove address
 ----------------
