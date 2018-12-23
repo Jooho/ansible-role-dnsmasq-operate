@@ -30,20 +30,20 @@
   lineinfile:
     path: "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
     line: |
-       address=/{{ new_hostname }}/{{ new_ip }}/
+       address=/{{ new_hostname }}/{{ new_ip }}
   become: yes
   when:
   - dns_ops == 'add'
   - new_hostname is defined
-  - not conf_contents.stdout.find('address=/' + new_hostname +'/'+ new_ip +'/') != -1
+  - not conf_contents.stdout.find('address=/' + new_hostname +'/'+ new_ip) != -1
   notify:
   - restart dnsmasq
-  
+
 - name: Delete address record to dnsmasq
   lineinfile:
     path: "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
     line: |
-       address=/{{ new_hostname }}/{{ new_ip }}/
+       address=/{{ new_hostname }}/{{ new_ip }}
     state: absent
   become: yes
   when:
@@ -56,12 +56,12 @@
   lineinfile:
     path: "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
     line: >
-       server=/{{ new_ns_search_for }}/{{ new_ip }}/
+       server=/{{ new_ns_search_for }}/{{ new_ip }}
   become: yes
   when:
   - dns_ops == 'add'
   - new_ns_search_for is defined
-  - not conf_contents.stdout.find('address=/' + new_ns_search_for +'/'+ new_ip +'/') != -1
+  - not conf_contents.stdout.find('address=/' + new_ns_search_for +'/'+ new_ip) != -1
   notify:
   - restart dnsmasq
 
@@ -69,7 +69,7 @@
   lineinfile:
     path: "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
     line: >
-       server=/{{ new_ns_search_for }}/{{ new_ip }}/
+       server=/{{ new_ns_search_for }}/{{ new_ip }}
     state: absent
   become: yes
   when:
