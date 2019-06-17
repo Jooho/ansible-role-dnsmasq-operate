@@ -42,7 +42,7 @@ Example Playbook - Install
     - import_role:
         name: ansible-role-dnsmasq-operate
       vars:
-        dns_ops: add
+        dns_ops: install
 ~~~
 
 Example Playbook - add/remove address
