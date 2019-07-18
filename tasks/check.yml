@@ -6,10 +6,21 @@
   when:
   - dns_ops != 'install' and dns_conf_name is undefined
 
-- name: Check params - new_hostname/new_new_nameserver_search
+- name: Check params - new_hostname
   fail:
-    msg: "Insufficient params: new_hostname or new_new_ns_search_for or both are specified"
-  when: (dns_ops != 'install' and new_hostname is undefined and new_ns_search_for is undefined) or (dns_ops != 'install' and new_hostname is defined and new_ns_search_for is defined)
+    msg: "Insufficient params: new_hostname and new_new_ns_search_for, both are specified"
+  when: 
+  - dns_ops != 'install' 
+  - new_hostname is defined 
+  - new_ns_search_for is defined
+
+- name: Check params - new_new_nameserver_search
+  fail:
+    msg: "Insufficient params: new_hostname or new_new_ns_search_for, only one param should be specified"
+  when: 
+  - dns_ops != 'install' 
+  - new_hostname is undefined  
+  - new_ns_search_for is undefined
 
 - name: Check params - new_ip
   fail:
