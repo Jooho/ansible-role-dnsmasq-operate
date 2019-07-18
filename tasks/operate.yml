@@ -20,6 +20,8 @@
     path: "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
     state: touch
   become: yes
+  when:
+  - not conf_exist.stat.exists
 
 - name: To load conf file
   command: cat "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
