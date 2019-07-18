@@ -15,20 +15,27 @@
     path: "{{ dns_conf_path }}/forwarder.conf"
   register: forwarder_exist
 
-- name: Copy forwarder.conf
+- name: Clean existing forwarder.conf 
+  file:
+    path: "{{ dns_conf_path }}/forwarder.conf"
+    state: absent
+  become: yes
+  when: 
+  - rewrite_forward_conf|bool  
+
+- name: Generate forwarder.conf
   template: "src=forwarder.conf.j2 dest={{ dns_conf_path }}/forwarder.conf"
   become: yes
   when:
+  - rewrite_forward_conf|bool
   - forwarder_dns is defined
-  - not forwarder_exist.stat.exists
-  - forwarder_exist.stat.exists and rewrite_forward_conf|bool
 
 - name: Copy forwarder.conf if forwarder_dns is not defined
   copy: "src=forwarder.conf dest={{ dns_conf_path }}/forwarder.conf"
   become: yes
   when:
+  - rewrite_forward_conf|bool
   - forwarder_dns is not defined
-  - (not forwarder_exist.stat.exists) or (forwarder_exist.stat.exists and rewrite_forward_conf|bool)
 
 - name: DNS operate(address/nameserver)
   import_tasks: ./operate.yml
