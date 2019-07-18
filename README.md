@@ -19,7 +19,7 @@ Role Variables
 | -------------------- | -------------- | ------- | ---------------------------------------------------------------------------- |
 | dns_conf_name        | undefined      | yes     | dnsmasq conf file (/etc/dnsmasq.d/file.conf)                                 |
 | dns_conf_path        | /etc/dnsmasq.d | no      | dnsmasq conf path                                                            |
-| rewrite_conf         | true           | no      | Set false if you don't want to overwrite conf file when it exists            |
+| rewrite_conf         | false           | no      | Set false if you don't want to overwrite conf file when it exists            |
 | forward_dns          | 8.8.8.8        | no      | Set upstream DNS nameservers                                                 |
 | rewrite_forward_conf | false          | no      | Set true if upstream DNS nameservers are changed                             |
 | dns_ops              | install        | no      | Set install for dnsmasq package, add/remove for address or nameserver        |
