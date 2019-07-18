@@ -6,7 +6,7 @@
   register: conf_exist
   become: yes
 
-- name: Clean exist DNS conf for OKD
+- name: Clean exist DNS conf 
   file:
     path: "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
     state: absent
@@ -15,13 +15,14 @@
   - conf_exist.stat.exists
   - rewrite_conf|bool
 
-- name: Create DNS conf for OKD
+- name: Create DNS conf 
   file:
     path: "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
     state: touch
   become: yes
   when:
-  - not conf_exist.stat.exists
+  - (not conf_exist.stat.exists) or (rewrite_conf|bool)
+
 
 - name: To load conf file
   command: cat "{{ dns_conf_path }}/{{ dns_conf_name }}.conf"
