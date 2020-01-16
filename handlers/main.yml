@@ -1,6 +1,6 @@
 - name: restart dnsmasq
   service:
     name: dnsmasq
-    state: restarted
+    state: "{{ dnsmasq_status }}"
   become: yes
   

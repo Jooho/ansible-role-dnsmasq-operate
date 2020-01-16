@@ -26,6 +26,7 @@ Role Variables
 | new_ip               | undefined      | yes     | For address record, it will map to new_hostname or new_nameserver_search_for |
 | new_hostname         | undefined      | yes     | For address record, it will map to new_ip                                    |
 | new_ns_search_for    | undefined      | yes     | For nameserver recode, it will map to new_ip                                 |
+| dnsmasq_status    | restarted      | no     | If NetworkManager dnsmasq is used, please set this `stopped`                    |
 
 Dependencies
 ------------
